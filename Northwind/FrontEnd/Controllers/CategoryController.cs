@@ -31,17 +31,21 @@ namespace FrontEnd.Controllers
         // GET: CategoryController/Create
         public ActionResult Create()
         {
+            
             return View();
         }
 
         // POST: CategoryController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(CategoryViewModel category)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                categoryHelper = new CategoryHelper();
+                 category = categoryHelper.Create(category);
+
+                return RedirectToAction("Details", new {id=category.CategoryID});
             }
             catch
             {
@@ -52,16 +56,23 @@ namespace FrontEnd.Controllers
         // GET: CategoryController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            categoryHelper = new CategoryHelper();
+            CategoryViewModel category = categoryHelper.Get(id);
+
+            return View(category);
         }
 
         // POST: CategoryController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(CategoryViewModel category)
         {
             try
             {
+                CategoryHelper categoryHelper = new CategoryHelper();
+                category=categoryHelper.Edit(category);
+
+
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -73,16 +84,23 @@ namespace FrontEnd.Controllers
         // GET: CategoryController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            categoryHelper = new CategoryHelper();
+            CategoryViewModel category = categoryHelper.Get(id);
+
+            return View(category);
         }
 
         // POST: CategoryController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(CategoryViewModel category)
         {
             try
             {
+                categoryHelper = new CategoryHelper();
+                categoryHelper.Delete(category.CategoryID);
+
+
                 return RedirectToAction(nameof(Index));
             }
             catch
